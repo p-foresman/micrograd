@@ -1,0 +1,8 @@
+name = "Micrograd"
+uuid = "b3f68d46-2233-4a60-85ad-072f0f69ef99"
+authors = ["p-foresman <98059656+p-foresman@users.noreply.github.com>"]
+version = "0.1.0"
+
+[deps]
+GraphViz = "f526b714-d49f-11e8-06ff-31ed36ee7ee0"
+Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
