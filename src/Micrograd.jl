@@ -2,21 +2,26 @@ module Micrograd
 
 export
     Node,
+    Neuron,
+    Layer,
+    MLP,
     value,
     label,
     label!,
     gradient,
     gradient!,
-    backprop,
-    draw_dot
+    backprop!,
+    forward!,
+    Input,
+    DataSet
 
-using DataStructures
+using
+    DataStructures,
+    Distributions
 
+include("node.jl")
+include("engine.jl")
+include("neuralnet.jl")
+include("graphviz.jl")
 
-# include("operations.jl")
-include("node_working.jl")
-# include("node.jl")
-# include("engine.jl")
-# include("graphviz.jl")
-
-end # module Micrograd
+end

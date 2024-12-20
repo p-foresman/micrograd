@@ -29,7 +29,7 @@ n = x1w1x2x2 + b; label!(n, "n")
 o = ((exp(Node(2)*n)) - Node(1)) / ((exp(Node(2)*n)) + Node(1))
 
 
-Micrograd.backprop_kahns(o)
+Micrograd.backprop(o)
 
 
 

@@ -168,7 +168,7 @@ function backprop(node::AbstractNode)
 
     gradient!(node, 1)
     for node in reverse(topo)
-        println(node)
+        # println(node)
         do_backprop(node)
     end
 end
@@ -181,26 +181,22 @@ function backprop_kahns(node::AbstractNode)
 
     while !isempty(q)
         curr = dequeue!(q)
-        depends = []
+        depends = Vector{AbstractNode}() #this step is sketchy, as im building a dependency list every iteration
         for n in q
             for p in prev(n)
-                push!(depends, p)
+                push!(depends, p) 
             end
         end
-        if !(curr in depends) #if the current node has nothing depending on it, do backprop and mark as finished
-            # println("no depends!")
-            # println(depends)
-            # println(curr)
+        if !(curr in depends) #if the current node has nothing depending on it, do backprop. The node will not be requeued.
             do_backprop(curr)
-            println(curr)
+            # println(curr)
             for child in prev(curr)
                 if !(child in q)
                     enqueue!(q, child)
                 end
             end
         else
-            println("depends...")
-            enqueue!(q, curr) # if it had something depending on it, requeue it
+            enqueue!(q, curr) # if it had something depending on it, requeue it. This ensures reverse topological order
         end
     end
 end

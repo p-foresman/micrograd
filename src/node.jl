@@ -41,7 +41,7 @@ struct TanhNode <: AbstractNode
 
     function TanhNode(node::AbstractNode; label::String="")
         x = value(node)
-        t = (exp(2*x) - 1)/(exp(2*x) + 1)
+        t = (Base.exp(2*x) - 1)/(Base.exp(2*x) + 1)
         return new(_Data(t, label), node)
     end
 end
@@ -50,7 +50,7 @@ struct ExpNode <: AbstractNode
     prev::AbstractNode #make this set?
 
     function ExpNode(node::AbstractNode; label::String="")
-        return new(_Data(exp(value(node)), label), node)
+        return new(_Data(Base.exp(value(node)), label), node)
     end
 end
 struct PowNode <: AbstractNode
@@ -71,19 +71,17 @@ value!(node::AbstractNode, val::Real) = setfield!(_data(node), :value, Float64(v
 gradient(node::AbstractNode) = getfield(_data(node), :gradient)
 gradient!(node::AbstractNode, grad::Real) = setfield!(_data(node), :gradient, Float64(grad))
 accumulate_gradient!(node::AbstractNode, grad::Real) = gradient!(node, gradient(node) + grad)
-prev(node::AbstractNode) = getfield(node, :prev) #NOTE: will likely cause type instability
-# function prev(node::AbstractNode, index::Integer)
-#     try
-#         return getindex(prev(node), index)
-#     catch err
-#         if err isa BoundsError
-#             return nothing
-#         end
-#     end
-# end
+
+#want prev() to return a tuple in any case so it can be iterated through
+const TwoPrevNodes = Union{AddNode, MulNode}
+const OnePrevNodes = Union{TanhNode, ExpNode, PowNode}
+prev(node::TwoPrevNodes) = getfield(node, :prev)
+prev(node::OnePrevNodes) = (getfield(node, :prev),)
+prev(::LeafNode) = ()
+
 label(node::AbstractNode) = getfield(_data(node), :label)
 label!(node::AbstractNode, label::String) = setfield!(_data(node), :label, label)
 
 power(node::PowNode) = getfield(node, :power)
 
-Base.show(io::IO, node::AbstractNode) = print(io, "$(typeof(node))(value=$(value(node)), gradient=$(gradient(node)))") #NOTE: fix this?
+Base.show(io::IO, node::AbstractNode) = print(io, "$(typeof(node))(value=$(value(node)), gradient=$(gradient(node)))")
