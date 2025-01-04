@@ -12,8 +12,14 @@ export
     gradient!,
     backprop!,
     forward!,
-    Input,
-    DataSet
+    parameters,
+    TrainingSet,
+    inputs,
+    outputs,
+    train!,
+    predict
+    # Input,
+    # DataSet
 
 using
     DataStructures,

@@ -68,9 +68,11 @@ end
 _data(node) = getfield(node, :data)
 value(node::AbstractNode) = getfield(_data(node), :value)
 value!(node::AbstractNode, val::Real) = setfield!(_data(node), :value, Float64(val))
+accumulate_value!(node::AbstractNode, val::Real) = value!(node, value(node) + val)
 gradient(node::AbstractNode) = getfield(_data(node), :gradient)
 gradient!(node::AbstractNode, grad::Real) = setfield!(_data(node), :gradient, Float64(grad))
 accumulate_gradient!(node::AbstractNode, grad::Real) = gradient!(node, gradient(node) + grad)
+reset_gradient!(node::AbstractNode) = gradient!(node, 0.0)
 
 #want prev() to return a tuple in any case so it can be iterated through
 const TwoPrevNodes = Union{AddNode, MulNode}
