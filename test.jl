@@ -48,7 +48,7 @@ using Micrograd
 # backprop(o2)
 # gradient(a2) #0.07065082485316443
 
-mlp = MLP(3, [4, 4, 1])
+mlp = MLP(3, [4, 4, 1], activation=:relu)
 
 xs = [
     [2.0, 3.0, -1.0],

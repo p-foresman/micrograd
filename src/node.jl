@@ -62,7 +62,14 @@ struct PowNode <: AbstractNode
         return new(_Data(value(node)^power, label), node, Float64(power))
     end
 end
+# struct ReluNode <: AbstractNode #doesnt work correctly
+#     data::_Data
+#     prev::AbstractNode #make this set?
 
+#     function(ReluNode(node::AbstractNode; label::String="ReLU"))
+#         return new(_Data(value(node) < 0 ? 0 : value(node), label), node)
+#     end
+# end
 
 ######### AbstractNode methods #############
 _data(node) = getfield(node, :data)
@@ -76,7 +83,7 @@ reset_gradient!(node::AbstractNode) = gradient!(node, 0.0)
 
 #want prev() to return a tuple in any case so it can be iterated through
 const TwoPrevNodes = Union{AddNode, MulNode}
-const OnePrevNodes = Union{TanhNode, ExpNode, PowNode}
+const OnePrevNodes = Union{TanhNode, ExpNode, PowNode} #, ReluNode
 prev(node::TwoPrevNodes) = getfield(node, :prev)
 prev(node::OnePrevNodes) = (getfield(node, :prev),)
 prev(::LeafNode) = ()

@@ -7,6 +7,7 @@ Base.exp(node::AbstractNode) = ExpNode(node)
 Base.:^(node::AbstractNode, power::Real) = PowNode(node, power)
 Base.:/(node1::AbstractNode, node2::AbstractNode) = MulNode(node1, PowNode(node2, -1)) #create division from other node types (node1 * (node2^-1))
 Base.:-(node1::AbstractNode, node2::AbstractNode) = AddNode(node1, MulNode(node2, Node(-1))) #create subtraction from other node types (node1 + (-1*node2))
+# relu(node::AbstractNode) = ReluNode(node)
 
 
 
@@ -61,3 +62,7 @@ end
 function _backprop!(node::PowNode)
     accumulate_gradient!(prev(node)[1], power(node) * (value(prev(node)[1]) ^ (power(node) - 1)) * gradient(node))
 end
+
+# function _backprop!(node::ReluNode)
+#     accumulate_gradient!(prev(node)[1], (value(node) > 0) * gradient(node))
+# end
